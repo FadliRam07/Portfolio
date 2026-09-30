@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+  overflow-x: hidden; /* cegah horizontal scroll di mobile */
+}
+
+body {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  image-rendering: pixelated;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ukuran font responsif */
+@media (min-width: 640px) {
+  body {
+    font-size: 20px;
+  }
+}
+
+/* Prevent zoom on input focus iOS */
+input,
+textarea,
+select {
+  font-size: 16px !important;
+}
+
+@media (min-width: 640px) {
+  input,
+  textarea,
+  select {
+    font-size: 18px !important;
+  }
+}
