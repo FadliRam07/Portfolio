@@ -11,9 +11,6 @@ const BG_TOP = '/images/hero-bg2.jpg';
 const BG_MIDDLE = '/images/hero-bg.jpg';
 const BG_BOTTOM = '/images/hero-bg2.jpg';
 
-/* ============================================
-   BG UNTUK TIAP BARIS SECTION (horizontal)
-   ============================================ */
 const ROW_BGS = [
   '/images/hero-bg2.jpg',
   '/images/hero-bg.jpg',
@@ -21,7 +18,7 @@ const ROW_BGS = [
 ];
 
 /* ============================================
-   PALET WARNA CARD — SOLID & KONTRAS
+   PALET WARNA CARD
    ============================================ */
 const CARD_THEMES = [
   {
@@ -63,7 +60,7 @@ const CARD_THEMES = [
 ];
 
 /* ============================================
-   BG WRAPPER (untuk section)
+   BG WRAPPER
    ============================================ */
 function SectionWithBg({ bgImage, overlay = 'bg-pixel-night/50', children, className = '' }) {
   const [bgError, setBgError] = useState(false);
@@ -97,11 +94,19 @@ function SectionWithBg({ bgImage, overlay = 'bg-pixel-night/50', children, class
 }
 
 /* ============================================
-   KOMPONEN CARD SERTIFIKAT — SOLID COLOR
+   KOMPONEN CARD SERTIFIKAT
+   Foto & tombol LIHAT → buka di tab baru
    ============================================ */
-function CertificateCard({ cert, index, onZoom }) {
+function CertificateCard({ cert, index }) {
   const theme = CARD_THEMES[index % CARD_THEMES.length];
   const certNumber = String(index + 1).padStart(2, '0');
+
+  // Buka gambar di tab baru
+  const openInNewTab = () => {
+    if (cert.image_url) {
+      window.open(cert.image_url, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <div
@@ -115,21 +120,24 @@ function CertificateCard({ cert, index, onZoom }) {
         }}
       />
 
+      {/* BADGE NOMOR */}
       <div
-        className={`absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 border-4 border-black px-1.5 sm:px-2 py-0.5 sm:py-1 font-pixel text-[8px] sm:text-[10px] ${theme.badgeBg} ${theme.badgeText}`}
+        className={`absolute top-3 left-3 z-20 border-4 border-black px-2 py-1 font-pixel text-[9px] sm:text-[10px] ${theme.badgeBg} ${theme.badgeText}`}
       >
         #{certNumber}
       </div>
 
-      <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-20">
-        <div className="w-7 h-7 sm:w-8 sm:h-8 border-2 border-black bg-pixel-night flex items-center justify-center">
-          <IconTrophy size={14} className="sm:w-4 sm:h-4" />
+      {/* BADGE TROPHY */}
+      <div className="absolute top-3 right-3 z-20">
+        <div className="w-8 h-8 border-2 border-black bg-pixel-night flex items-center justify-center">
+          <IconTrophy size={16} />
         </div>
       </div>
 
+      {/* FOTO SERTIFIKAT — klik buka tab baru */}
       <div
         className="relative w-full bg-white border-b-4 border-black cursor-pointer group overflow-hidden z-10"
-        onClick={() => cert.image_url && onZoom(cert)}
+        onClick={openInNewTab}
       >
         {cert.image_url ? (
           <>
@@ -137,34 +145,37 @@ function CertificateCard({ cert, index, onZoom }) {
               src={cert.image_url}
               alt={cert.title}
               loading="lazy"
-              className="w-full h-44 sm:h-52 md:h-60 object-contain bg-white transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-52 sm:h-60 object-contain bg-white transition-transform duration-300 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100 p-2">
-              <div className="bg-pixel-accent border-4 border-black px-2 sm:px-3 py-1.5 sm:py-2 font-pixel text-[8px] sm:text-[9px] text-pixel-night">
-                KLIK UNTUK ZOOM
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <div className="bg-pixel-accent border-4 border-black px-3 py-2 font-pixel text-[9px] text-pixel-night flex items-center gap-2">
+                <IconDownload size={12} />
+                <span>BUKA DI TAB BARU</span>
               </div>
             </div>
           </>
         ) : (
-          <div className="w-full h-44 sm:h-52 md:h-60 flex flex-col items-center justify-center bg-pixel-sky-dark text-pixel-cream gap-2">
-            <IconTrophy size={36} className="sm:w-12 sm:h-12" />
-            <p className="font-pixel text-[8px] sm:text-[9px]">NO IMAGE</p>
+          <div className="w-full h-52 sm:h-60 flex flex-col items-center justify-center bg-pixel-sky-dark text-pixel-cream gap-2">
+            <IconTrophy size={48} />
+            <p className="font-pixel text-[9px]">NO IMAGE</p>
           </div>
         )}
       </div>
 
-      <div className="relative z-10 p-3.5 sm:p-4 md:p-5 flex flex-col flex-1 gap-2.5 sm:gap-3">
+      {/* INFO CONTENT */}
+      <div className="relative z-10 p-4 sm:p-5 flex flex-col flex-1 gap-3">
         <h3
-          className={`font-pixel text-[10px] sm:text-xs leading-relaxed break-words min-h-[2.25rem] sm:min-h-[2.5rem] ${theme.accent} drop-shadow-[1px_1px_0_rgba(0,0,0,0.3)]`}
+          className={`font-pixel text-[10px] sm:text-xs leading-relaxed break-words min-h-[2.5rem] ${theme.accent} drop-shadow-[1px_1px_0_rgba(0,0,0,0.3)]`}
         >
           {cert.title}
         </h3>
 
-        <div className={`border-2 border-black/40 p-2.5 sm:p-3 space-y-1.5 sm:space-y-2 ${theme.metaBg}`}>
-          <div className="flex items-start gap-1.5 sm:gap-2">
-            <IconTrophy size={12} className={`flex-shrink-0 mt-0.5 sm:w-[14px] sm:h-[14px] ${theme.accent}`} />
+        {/* META BOX */}
+        <div className={`border-2 border-black/40 p-3 space-y-2 ${theme.metaBg}`}>
+          <div className="flex items-start gap-2">
+            <IconTrophy size={14} className={`flex-shrink-0 mt-0.5 ${theme.accent}`} />
             <div className="flex-1 min-w-0">
-              <p className={`font-pixel text-[7px] sm:text-[8px] opacity-70 ${theme.text}`}>
+              <p className={`font-pixel text-[8px] opacity-70 ${theme.text}`}>
                 PENERBIT
               </p>
               <p
@@ -177,10 +188,10 @@ function CertificateCard({ cert, index, onZoom }) {
 
           <div className={`border-t ${theme.divider}`} />
 
-          <div className="flex items-start gap-1.5 sm:gap-2">
-            <IconStar size={12} className={`flex-shrink-0 mt-0.5 sm:w-[14px] sm:h-[14px] ${theme.accent}`} />
+          <div className="flex items-start gap-2">
+            <IconStar size={14} className={`flex-shrink-0 mt-0.5 ${theme.accent}`} />
             <div className="flex-1 min-w-0">
-              <p className={`font-pixel text-[7px] sm:text-[8px] opacity-70 ${theme.text}`}>
+              <p className={`font-pixel text-[8px] opacity-70 ${theme.text}`}>
                 TANGGAL
               </p>
               <p className={`font-mono text-sm sm:text-base ${theme.text}`}>
@@ -196,13 +207,14 @@ function CertificateCard({ cert, index, onZoom }) {
           </div>
         </div>
 
-        <div className="mt-auto flex flex-wrap gap-1.5 sm:gap-2 pt-1">
+        {/* BUTTONS */}
+        <div className="mt-auto flex flex-wrap gap-2 pt-1">
           {cert.image_url && (
             <button
-              onClick={() => onZoom(cert)}
-              className={`flex-1 min-w-[80px] sm:min-w-[90px] font-pixel text-[8px] sm:text-[10px] uppercase tracking-wider px-2.5 sm:px-3 py-2.5 sm:py-3 border-4 border-black shadow-pixel hover:-translate-y-0.5 hover:shadow-pixel-lg active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${theme.btnPrimary}`}
+              onClick={openInNewTab}
+              className={`flex-1 min-w-[90px] font-pixel text-[9px] sm:text-[10px] uppercase tracking-wider px-3 py-3 border-4 border-black shadow-pixel hover:-translate-y-0.5 hover:shadow-pixel-lg active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 ${theme.btnPrimary}`}
             >
-              <IconTrophy size={11} className="sm:w-3 sm:h-3" />
+              <IconTrophy size={12} />
               <span>LIHAT</span>
             </button>
           )}
@@ -211,9 +223,9 @@ function CertificateCard({ cert, index, onZoom }) {
               href={cert.credential_url}
               target="_blank"
               rel="noreferrer"
-              className={`flex-1 min-w-[80px] sm:min-w-[90px] font-pixel text-[8px] sm:text-[10px] uppercase tracking-wider px-2.5 sm:px-3 py-2.5 sm:py-3 border-4 border-black shadow-pixel hover:-translate-y-0.5 hover:shadow-pixel-lg active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${theme.btnSecondary}`}
+              className={`flex-1 min-w-[90px] font-pixel text-[9px] sm:text-[10px] uppercase tracking-wider px-3 py-3 border-4 border-black shadow-pixel hover:-translate-y-0.5 hover:shadow-pixel-lg active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 ${theme.btnSecondary}`}
             >
-              <IconDownload size={11} className="sm:w-3 sm:h-3" />
+              <IconDownload size={12} />
               <span>VERIFY</span>
             </a>
           )}
@@ -224,7 +236,7 @@ function CertificateCard({ cert, index, onZoom }) {
 }
 
 /* ============================================
-   BG STRIP HORIZONTAL (untuk section 2)
+   BG STRIP HORIZONTAL
    ============================================ */
 function HorizontalStripBg({ items }) {
   return (
@@ -272,7 +284,6 @@ function StripBgItem({ bgImage, overlay = 'bg-pixel-night/65' }) {
 export default function Certificates() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -284,12 +295,6 @@ export default function Certificates() {
       else setItems(data || []);
       setLoading(false);
     })();
-  }, []);
-
-  useEffect(() => {
-    const onEsc = (e) => e.key === 'Escape' && setLightbox(null);
-    window.addEventListener('keydown', onEsc);
-    return () => window.removeEventListener('keydown', onEsc);
   }, []);
 
   const totalCerts = items.length;
@@ -386,12 +391,7 @@ export default function Certificates() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-7">
               {items.map((cert, idx) => (
-                <CertificateCard
-                  key={cert.id}
-                  cert={cert}
-                  index={idx}
-                  onZoom={setLightbox}
-                />
+                <CertificateCard key={cert.id} cert={cert} index={idx} />
               ))}
             </div>
           )}
@@ -427,59 +427,6 @@ export default function Certificates() {
           </PixelCard>
         </div>
       </SectionWithBg>
-
-      {/* ==========================================
-          LIGHTBOX MODAL — Popup Center, Auto-Fit
-          ========================================== */}
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-3 sm:p-6 animate-slideUp"
-          onClick={() => setLightbox(null)}
-        >
-          <div
-            className="relative w-full max-w-4xl max-h-[90vh] flex flex-col border-4 border-pixel-accent bg-pixel-night shadow-pixel-lg"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* HEADER */}
-            <div className="flex-shrink-0 flex items-center justify-between border-b-4 border-pixel-accent px-3 py-2.5">
-              <div className="flex items-center gap-2 min-w-0">
-                <IconTrophy size={16} className="flex-shrink-0" />
-                <p className="font-pixel text-[10px] sm:text-xs text-pixel-accent truncate">
-                  {lightbox.title}
-                </p>
-              </div>
-              <button
-                onClick={() => setLightbox(null)}
-                aria-label="Close"
-                className="w-8 h-8 flex-shrink-0 border-2 border-black bg-pixel-red text-pixel-cream font-pixel text-xs hover:-translate-y-0.5 transition-all ml-2"
-              >
-                X
-              </button>
-            </div>
-
-            {/* IMAGE AREA */}
-            <div className="flex-1 min-h-0 bg-white flex items-center justify-center overflow-hidden p-2 sm:p-4">
-              <img
-                src={lightbox.image_url}
-                alt={lightbox.title}
-                className="block max-w-full max-h-full w-auto h-auto object-contain"
-                style={{ imageRendering: 'auto' }}
-              />
-            </div>
-
-            {/* FOOTER */}
-            <div className="flex-shrink-0 border-t-4 border-pixel-accent px-3 py-2 text-center">
-              <p className="font-mono text-pixel-cream text-xs sm:text-sm opacity-80">
-                Klik di luar atau tekan{' '}
-                <span className="text-pixel-accent font-pixel text-[10px]">
-                  ESC
-                </span>{' '}
-                untuk menutup
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
